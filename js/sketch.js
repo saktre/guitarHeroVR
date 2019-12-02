@@ -65,28 +65,28 @@ function setup() {
 	// sphere primitive for CLicking buttons and visualizing them
 
 	sphereGreen = new Sphere({
-						x:0, y:0.9, z:1,
+						x:-0.09, y:0.9, z:1,
 						radius: 0.05,
 						red:0, green:255, blue:0
 					});
 	world.add(sphereGreen);
 
   sphereRed = new Sphere({
-						x:0.1, y:0.9, z:1,
+						x:0.02, y:0.9, z:1,
 						radius: 0.05,
 						red:255, green:0, blue:0
 					});
 	world.add(sphereRed);
 
   sphereYellow = new Sphere({
-						x:0.2, y:0.9, z:1,
+						x:0.13, y:0.9, z:1,
 						radius: 0.05,
 						red:255, green:255, blue:0
 					});
 	world.add(sphereYellow);
 
   sphereBlue = new Sphere({
-						x:0.3, y:0.9, z:1,
+						x:0.24, y:0.9, z:1,
 						radius: 0.05,
 						red:0, green:0, blue:255
 					});
