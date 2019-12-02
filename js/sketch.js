@@ -130,10 +130,12 @@ function draw() {
   if(songIsPlaying == true){
 	  updateText();
   }
+	/*
 	// Gameplay controls
 	if(keyIsPressed == true && key == "p") {
 		cubeFace.play();
 	}
+	*/
 	if(keyIsPressed == true && key == "q") {
 		//greenPoint.push(Math.floor(millis() / 1000));
 		sphereGreen.setGreen(255);
