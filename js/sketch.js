@@ -15,7 +15,7 @@ var edgeTV;
 
 var currentTime;
 
-var hits;
+var hits = 1;
 
 var timeBoard;
 
@@ -24,6 +24,17 @@ var redPoint = [];
 var yellowPoint = [];
 var bluePoint = [];
 
+var pointBar;
+
+var cheering;
+var booing;
+
+
+function preload() {
+	cheering = loadSound("static/cheering.mp3");
+	booing = loadSound("static/booing.mp3");
+}
+
 
 // Main setup codes to get the VR WORLD ready
 function setup() {
@@ -31,9 +42,25 @@ function setup() {
 	noCanvas();
 
 	currentTime = millis();
+
+	cheering.setVolume(0.01);
+	booing.setVolume(0.01);
+
 	// construct the A-Frame world
 	// this function requires a reference to the ID of the 'a-scene' tag in our HTML document
 	world = new World('VRScene');
+
+	generateCrowd();
+
+	pointBar = new Plane({
+		x:-3, y:3, z:0,
+		width: 0.1,
+		height: 0.2,
+		red: 0,
+		green: 0,
+		blue: 255,
+	});
+	world.add(pointBar);
 
 	// sphere primitive for CLicking buttons and visualizing them
 
@@ -98,13 +125,11 @@ function setup() {
 function draw() {
 
 
-// WHat do we need? Lets first
-// 1) Get the current time of the video be diplayed in the VR world
-if(songIsPlaying == true){
-	updateText();
-
-}
-
+  // WHat do we need? Lets first
+  // 1) Get the current time of the video be diplayed in the VR world
+  if(songIsPlaying == true){
+	  updateText();
+  }
 	// Gameplay controls
 	if(keyIsPressed == true && key == "p") {
 		cubeFace.play();
@@ -139,96 +164,19 @@ if(songIsPlaying == true){
 		sphereYellow.setRed(0);
 		sphereBlue.setBlue(0);
 	}
-
-
-
-}
-
-
-
-
-function keyPressed() {
-		if(key == "q") {
-			if(sphereGreen.green == 255 && sphereGreen.red == 0 && sphereGreen.blue == 0) {
-				world.remove(sphereGreen);
-			  sphereGreen = new Sphere({
-								x:0, y:0.9, z:1,
-								radius: 0.05,
-								red:255, green:255, blue:255
-							});
-			  world.add(sphereGreen);
-			}
-			else {
-				world.remove(sphereGreen);
-			  sphereGreen = new Sphere({
-								x:0, y:0.9, z:1,
-								radius: 0.05,
-								red:0, green:255, blue:0
-							});
-			  world.add(sphereGreen);
-			}
+	if(hits > 0) {
+		for(let happyCrowd = 0; happyCrowd < crowdAction.length; happyCrowd++) {
+			crowdAction[happyCrowd].move();
 		}
+		cheering.loop();
+	}
 
-		if(key == "w") {
-			if(sphereRed.green == 0 && sphereRed.red == 255 && sphereRed.blue == 0) {
-				world.remove(sphereRed);
-			  sphereRed = new Sphere({
-								x:0.1, y:0.9, z:1,
-								radius: 0.05,
-								red:255, green:255, blue:255
-							});
-			  world.add(sphereRed);
-			}
-			else {
-				world.remove(sphereRed);
-				sphereRed = new Sphere({
-									x:0.1, y:0.9, z:1,
-									radius: 0.05,
-									red:255, green:0, blue:0
-								});
-				world.add(sphereRed);
-			}
-		}
-		if(key == "e") {
-			if(sphereYellow.green == 255 && sphereYellow.red == 255 && sphereYellow.blue == 0) {
-				world.remove(sphereYellow);
-			  sphereYellow = new Sphere({
-								x:0.2, y:0.9, z:1,
-								radius: 0.05,
-								red:255, green:255, blue:255
-							});
-			  world.add(sphereYellow);
-			}
-			else {
-				world.remove(sphereYellow);
-				sphereYellow = new Sphere({
-									x:0.2, y:0.9, z:1,
-									radius: 0.05,
-									red:255, green:255, blue:0
-								});
-				world.add(sphereYellow);
-			}
-		}
-		if(key == "r") {
-			if(sphereBlue.green == 0 && sphereBlue.red == 0 && sphereBlue.blue == 255) {
-				world.remove(sphereBlue);
-			  sphereBlue = new Sphere({
-								x:0.3, y:0.9, z:1,
-								radius: 0.05,
-								red:255, green:255, blue:255
-							});
-			  world.add(sphereBlue);
-			}
-			else {
-				world.remove(sphereBlue);
-				sphereBlue = new Sphere({
-									x:0.3, y:0.9, z:1,
-									radius: 0.05,
-									red:0, green:0, blue:255
-								});
-				world.add(sphereBlue);
-			}
-		}
+	/*
+	if(hits < 40 && Math.floor(millis() / 1000) == Math.floor(cubeFace.duration / 2)) {
+		booing.loop();
+	}
+	*/
+
 }
 
 // Using mouse press to do what? Maybe point at squres to choose difficulty and song and then play
