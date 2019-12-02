@@ -2,8 +2,10 @@
 var world;
 var stage;
 
+// For debugging and showing text
 var textHolder
-var songIsPlaying = false;
+var songIsPlaying = false; //Variable to decide whether to use time difference between original and millis to make decisions on collisions
+
 
 var sphereGreen;
 var sphereRed;
@@ -23,21 +25,17 @@ var yellowPoint = [];
 var bluePoint = [];
 
 
+// Main setup codes to get the VR WORLD ready
 function setup() {
 	// no canvas needed
 	noCanvas();
 
 	currentTime = millis();
-
 	// construct the A-Frame world
 	// this function requires a reference to the ID of the 'a-scene' tag in our HTML document
 	world = new World('VRScene');
 
-	// now that we have a world we can add elements to it using a series of wrapper classes
-	// these classes are discussed in greater detail on the A-Frame P5 documentation site
-	// https://cs.nyu.edu/courses/fall19/CSCI-UA.0380-001/aframep5.php
-
-	// sphere primitive
+	// sphere primitive for CLicking buttons and visualizing them
 
 	sphereGreen = new Sphere({
 						x:0, y:0.9, z:1,
@@ -67,6 +65,7 @@ function setup() {
 					});
 	world.add(sphereBlue);
 
+// Adding stage
 	stage = new OBJ({
 		asset: 'stage',
 		mtl: 'stageMtl',
@@ -89,6 +88,10 @@ function setup() {
 
 	world.add(textHolder)
 
+
+	// Adding crowd to the VR
+	// generateCrowd()
+
 }
 
 
@@ -103,25 +106,42 @@ if(songIsPlaying == true){
 }
 
 	// Gameplay controls
-
+	if(keyIsPressed == true && key == "p") {
+		cubeFace.play();
+	}
 	if(keyIsPressed == true && key == "q") {
-		greenPoint.push(Math.floor(millis() / 1000));
+		//greenPoint.push(Math.floor(millis() / 1000));
+		sphereGreen.setGreen(255);
 	}
 	if(keyIsPressed == true && key == "w") {
-		redPoint.push(Math.floor(millis() / 1000));
+		//redPoint.push(Math.floor(millis() / 1000));
+		sphereRed.setRed(255);
 	}
 	if(keyIsPressed == true && key == "e") {
-		yellowPoint.push(Math.floor(millis() / 1000));
+		//yellowPoint.push(Math.floor(millis() / 1000));
+		sphereYellow.setGreen(255);
+		sphereYellow.setRed(255);
 	}
 	if(keyIsPressed == true && key == "r") {
-		bluePoint.push(Math.floor(millis() / 1000));
+		//bluePoint.push(Math.floor(millis() / 1000));
+		sphereBlue.setBlue(255);
 	}
 	if(keyIsPressed == true && key == "m") {
-		alert("Green Notes" + greenPoint);
-		alert("Red Notes" + redPoint);
-		alert("Yellow Notes" + yellowPoint);
-		alert("Blue Notes" + bluePoint);
+		//alert("Green Notes" + greenPoint);
+		//alert("Red Notes" + redPoint);
+		//alert("Yellow Notes" + yellowPoint);
+		//alert("Blue Notes" + bluePoint);
 	}
+	if(keyIsPressed == false) {
+		sphereGreen.setGreen(0);
+		sphereRed.setRed(0);
+		sphereYellow.setGreen(0);
+		sphereYellow.setRed(0);
+		sphereBlue.setBlue(0);
+	}
+
+
+
 }
 
 
@@ -211,8 +231,9 @@ function keyPressed() {
 		}
 }
 
+// Using mouse press to do what? Maybe point at squres to choose difficulty and song and then play
 function mousePressed(){
-	console.log("Clicked")
+	// console.log("Clicked")
 	// Why does this happen multiple times?
 
 }

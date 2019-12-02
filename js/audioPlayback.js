@@ -13,6 +13,7 @@ function StartSong(){
   mainSong.load();
   currentTime = millis();
   songIsPlaying =true;
+  // document.querySelector('[camera]').removeAttribute('wasd-controls');
 
 }
 
