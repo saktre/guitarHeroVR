@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="UTF-8">
+
+		<!-- A-Frame libraries -->
+		<script language="javascript" type="text/javascript" src="libraries/aframep5.js"></script>
+		<script language="javascript" type="text/javascript" src="libraries/aframe.min.js"></script>
+
+		<!-- P5 libraries -->
+		<script language="javascript" type="text/javascript" src="libraries/p5.min.js"></script>
+
+    <script language="javascript" type="text/javascript" src="libraries/p5.dom.min.js"></script>
+
+		<script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
+
+		<!-- AFrameP5 library -->
+
+		<!-- P5 Sketch -->
+		<script language="javascript" type="text/javascript" src="js/sketch.js"></script>
+
+<!-- Codes for other functionalities -->
+		<script language="javascript" type="text/javascript" src="js/audioPlayback.js"></script>
+
+		<!-- custom styles -->
+		<style>
+			body {
+				padding: 0;
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body>
+
+	  <!-- container to hold our VR scene - make sure to give this element an ID of 'VRScene' -->
+	    <a-scene id="VRScene">
+
+	    	<!--
+		       The 'a-assets' container is used to load in any external artwork you may want to use as "textures" for your objects.
+		       Ensure that this element has an ID of 'VRAssets'
+
+		       Textures can be loaded by creating a new 'a-asset' tag inside of the 'a-assets' container.
+		       When doing this you will need to make sure to give your textures a unique ID -
+		       this will be used by p5 to create new objects.
+
+
+		       Example:
+
+		       <img id="ITEM_ID_GOES_HERE" src="images/gold_block.png">
+			-->
+
+
+					<a-assets>
+				    <video id="song1-vid" autoplay loop="false" src="./../musicVR_Support/guitarHero.mp4"></video>
+				  </a-assets>
+
+				  <!-- Using the asset management system. -->
+				  <a-video src="#song1-vid" opacity="0.8" width="1.2" height="0.8" position="0.24 1.9 0"></a-video>
+
+
+			<a-assets id="VRAssets">
+        <!-- <a-video id = "guitarHero" src = "guitarHero.mp4" autoplay="false"> </a-video> -->
+				<a-asset-item id="stage" src="static/stage/model.obj"></a-asset-item>
+				<a-asset-item id="stageMtl" src="static/stage/materials.mtl"></a-asset-item>
+
+				<a-text value="Now Interactable" geometry="primitive:plane" position="0.24 1.9 0"></a-text>
+
+			</a-assets>
+      <!-- <a-entity position="0.24 1.3 0" geometry="primitive:plane" material="src: #guitarHero"> </a-entity> -->
+			<!-- Locking position of viewer on stage -->
+			<a-entity camera look-controls position="0 1.2 3"> </a-entity>
+
+	    </a-scene>
+
+	</body>
+</html>
