@@ -11,9 +11,9 @@ var booing;
 
 var crowdAction = [];
 
-// document.addEventListener("DOMContentLoaded",function() {
-// 	 cubeFace = document.querySelector("#guitarHero");
-// });
+document.addEventListener("DOMContentLoaded",function() {
+  cubeFace = document.querySelector("#guitarHero");
+});
 
 // Can be made modular, maybe just generate this into a csv or JSON and load it and draw the people.
 // Seems to be slow, better to be able to call it as a function so that we can comment line that calls it when testing it in draw
@@ -51,8 +51,10 @@ function generateCrowd(){
 			zPos = 1.2;
 		}
 		for(let chair = 0; chair < 13; chair++) {
-			audienceMember = new Watcher(xPos,yPos,zPos);
-			crowdAction.push(audienceMember);
+      if(Math.floor(random(0,5)) == 2 && crowdAction.length < 18) {
+        audienceMember = new Watcher(xPos,yPos,zPos);
+  			crowdAction.push(audienceMember);
+      }
 			//world.add(audienceMember);
 			if(chair == 2) {
 				xPos += 0.4;
