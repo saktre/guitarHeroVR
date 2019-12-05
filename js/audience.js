@@ -12,7 +12,9 @@ var booing;
 var crowdAction = [];
 
 document.addEventListener("DOMContentLoaded",function() {
-  cubeFace = document.querySelector("#guitarHero");
+  // cubeFace = document.querySelector("#guitarHero");
+  cubeFace = document.querySelector("#song1-vid");
+
 });
 
 // Can be made modular, maybe just generate this into a csv or JSON and load it and draw the people.

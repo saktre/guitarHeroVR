@@ -15,6 +15,7 @@
 		<script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
 
 		<script language="javascript" type="text/javascript" src="libraries/p5.sound.js"></script>
+		<!-- <script language="javascript" type="text/javascript" src="libraries/p5.sound.min.js"></script> -->
 
 		<!-- AFrameP5 library -->
 
@@ -23,11 +24,11 @@
 
 		<script language="javascript" type="text/javascript" src="js/sketch.js"></script>
 
-		<script language="javascript" type="text/javascript" src="libraries/p5.sound.min.js"></script>
 
 <!-- Codes for other functionalities -->
 		<script language="javascript" type="text/javascript" src="js/audioPlayback.js"></script>
-		<script language="javascript" type="text/javascript" src="js/audience.js"></script>
+		<!-- <script language="javascript" type="text/javascript" src="js/audience.js"></script> -->
+		<script language="javascript" type="text/javascript" src="js/visuals.js"></script>
 
 		<!-- custom styles -->
 		<style>
@@ -58,15 +59,20 @@
 
 
 					<a-assets>
-				    <video id="song1-vid" autoplay loop="false" src="./../musicVR_Support/guitarHero.mp4"></video>
-				  </a-assets>
+				    </a-assets>
 
 				  <!-- Using the asset management system. -->
-				  <a-video src="#song1-vid" opacity="0.8" width="1.2" height="0.8" position="0.24 1.9 0"></a-video>
+				  <!-- <a-video src="#song1-vid" opacity="0.8" width="1.2" height="0.8" position="0.24 1.9 0"></a-video> -->
 
 
 			<a-assets id="VRAssets">
-         <a-video id = "guitarHero" src = "static/guitarHero.mp4"> </a-video>
+				<!-- The video asset automatically starts, sometimes with many layers, need to assign it on demand -->
+         <!-- <a-video id = "guitarHero" src = "static/guitarHero.mp4"> </a-video> -->
+
+				 <video id="song1-vid" loop="false" src="static/guitarHero.mp4"></video>
+
+
+
 				<a-asset-item id="stage" src="static/stage/model.obj"></a-asset-item>
 				<a-asset-item id="stageMtl" src="static/stage/materials.mtl"></a-asset-item>
 
@@ -74,12 +80,19 @@
 				<a-asset-item id="audienceMemberMtl" src="static/person/materials.mtl"></a-asset-item>
 
 
-				<a-text value="Now Interactable" geometry="primitive:plane" position="0.24 1.9 0"></a-text>
 
 			</a-assets>
-        <a-entity position="0.24 1.6 1" geometry="primitive:plane" material="src: #guitarHero"> </a-entity>
+        <!-- <a-entity id="videoEntity" position="0.24 1.6 1" geometry="primitive:plane" material="src: #guitarHero"> </a-entity> -->
+
+				<!-- Alternate method to play video on plane and assign it source and when to start playing -->
+				<a-video src="#song1-vid" width="1" height="1" position="0.24 1.6 1"></a-video>
+
+				<a-text id="mainTextBox" value="Welcome to Guitar Hero VR mode" geometry="primitive:plane" position="0.23 1 1.5"></a-text>
+
 			<!-- Locking position of viewer on stage -->
 			<a-entity camera look-controls position="0 1.2 3"> </a-entity>
+
+
 
 	    </a-scene>
 

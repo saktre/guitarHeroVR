@@ -2,10 +2,18 @@
 var world;
 var stage;
 
+
+// Intital Game state to start the game
+// 0: Game load page - Select song
+// 1: Play song1 = "Slow Ride"
+// 2: Song Stats - Total hits/misses (percentage)
+var gameState = 0;
+var startGameBox; //For Starting the game as of now
+
+
 // For debugging and showing text
 var textHolder
 var songIsPlaying = false; //Variable to decide whether to use time difference between original and millis to make decisions on collisions
-
 
 var sphereGreen;
 var sphereRed;
@@ -14,6 +22,7 @@ var sphereBlue;
 var edgeTV;
 
 var currentTime;
+var offsetTime;
 
 var hits = 0;
 
@@ -29,16 +38,20 @@ var pointBar;
 var cheering;
 var booing;
 
-
+// Not being used
 function preload() {
-	cheering = loadSound("static/cheering.mp3");
-	booing = loadSound("static/booing.mp3");
+
 }
 
 
 // Main setup codes to get the VR WORLD ready
 function setup() {
 	// no canvas needed
+// Need to load the files in setup as per FAQs online
+// https://github.com/processing/p5.js/wiki/Frequently-Asked-Questions#why-cant-i-assign-variables-using-p5-functions-and-variables-before-setup
+
+	cheering = loadSound("static/cheering.mp3");
+	booing = loadSound("static/booing.mp3");
 	noCanvas();
 
 	currentTime = millis();
@@ -49,7 +62,12 @@ function setup() {
 	// construct the A-Frame world
 	// this function requires a reference to the ID of the 'a-scene' tag in our HTML document
 	world = new World('VRScene');
+
+// GENERATING THE crowd
+
 	generateCrowd();
+
+// Keeping score
 
 	pointBar = new Plane({
 		x:-3, y:3, z:0,
@@ -102,40 +120,53 @@ function setup() {
 	});
 	world.add(stage);
 
+
+	// Start Game box
+	startGameBox = new Box({
+						x:0,
+						y:1,
+						z:1.2,
+						opacity:0.2,
+						clickFunction: function(theBox) {
+							theBox.setColor( random(255), random(255), random(255) );
+
+							gameState = 1;
+
+						}
+	});
+	// add the box to the world
+	world.add(startGameBox);
+
 }
 
 
-function draw() {
-	/*
-	pointBar.tag.setAttribute('text',
-	    'value: 'hits';');
-	*/
 
+function PlayGame1(){
 
-  // WHat do we need? Lets first
-  // 1) Get the current time of the video be diplayed in the VR world
-	/*
-  if(songIsPlaying == true){
-	  updateText();
-  }
-	*/
-	if(keyIsPressed == true && key == "u" && greenPoint.includes(Math.floor(millis() / 1000))) {
+	// offsetTime is set to Millis value
+	 // when the user clicks play for current selected song
+	currentTime = millis()
+	// Assuming the values are relatively in time at second level
+	checkTime = Math.floor((currentTime - offsetTime)/1000)
+	// console.log(checkTime)
+
+	if(keyIsPressed == true && key == "u" && greenPoint.includes(checkTime)){
 		hits += 1;
 		sphereGreen.setGreen(255);
 		pointBar.setWidth(pointBar.getWidth() + 0.01);
 	}
-	if(keyIsPressed == true && key == "i" && redPoint.includes(Math.floor(millis() / 1000))) {
+	if(keyIsPressed == true && key == "i" && redPoint.includes(checkTime)) {
 		hits += 1;
 		sphereRed.setRed(255);
 		pointBar.setWidth(pointBar.getWidth() + 0.01);
 	}
-	if(keyIsPressed == true && key == "o" && yellowPoint.includes(Math.floor(millis() / 1000))) {
+	if(keyIsPressed == true && key == "o" && yellowPoint.includes(checkTime)) {
 		hits += 1;
 		sphereYellow.setGreen(255);
 		sphereYellow.setRed(255);
 		pointBar.setWidth(pointBar.getWidth() + 0.01);
 	}
-	if(keyIsPressed == true && key == "p" && bluePoint.includes(Math.floor(millis() / 1000))) {
+	if(keyIsPressed == true && key == "p" && bluePoint.includes(checkTime)) {
 		hits += 1;
 		sphereBlue.setBlue(255);
 		pointBar.setWidth(pointBar.getWidth() + 0.01);
@@ -147,6 +178,7 @@ function draw() {
 		sphereYellow.setRed(0);
 		sphereBlue.setBlue(0);
 	}
+
 	if(hits > 15) {
 		for(let happyCrowd = 0; happyCrowd < crowdAction.length; happyCrowd++) {
 			crowdAction[happyCrowd].move();
@@ -158,8 +190,33 @@ function draw() {
 		//booing.play();
 	}
 
+
+
 }
 
+function draw() {
+
+	if (gameState == 0) {
+		// console.log("Ready to start Game")
+
+	}
+
+	if (gameState ==1){
+
+		world.remove(startGameBox);
+		document.querySelector("#mainTextBox").remove()
+		cubeFace.play();
+		offsetTime = millis() - 4000
+		gameState =2
+
+	// Main game codes
+	}
+
+	if(gameState ==2){
+		PlayGame1();
+
+	}
+}
 // Using mouse press to do what? Maybe point at squres to choose difficulty and song and then play
 function mousePressed(){
 	// console.log("Clicked")
