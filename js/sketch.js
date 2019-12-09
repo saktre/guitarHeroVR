@@ -3,6 +3,12 @@ var world;
 var stage;
 
 
+var container;
+var b;
+var boxSong1, boxSong2;
+var songData;
+
+
 // Intital Game state to start the game
 // 0: Game load page - Select song
 // 1: Play song1 = "Slow Ride"
@@ -67,6 +73,12 @@ function setup() {
 
 	generateCrowd();
 
+// Load song file
+	songData = loadJSON("static/slowDownData.json")
+	// cubeFace.setAttribute("src",".././musicVR_Support/bohemianRhapsody.mp4")
+	cubeFace.setAttribute("src",".././musicVR_Support/slowRide.mp4")
+
+
 // Keeping score
 
 	pointBar = new Plane({
@@ -121,11 +133,45 @@ function setup() {
 	world.add(stage);
 
 
+// Container to hold start screen, first song, second song
+
+
+
+	// A container has a center point and rotation
+	container = new Container3D({
+	  x:0, y:1.2, z:1.4
+	})
+	world.add(container);
+
+	b = new Text({
+	  x:0, y:0, z:0.2
+	  // red:0, green:0, blue:30
+
+	})
+
+	// container.addChild(b)
+
+
+
+	boxSong1 = new Box({
+	  x:0, y:0, z:1,
+	  red:0, green:0, blue:0,
+	  width:4, height:3, depth:4,
+		opacity:0.3,
+		side: 'double',
+		clickFunction: function(theOBJ) {
+	  	console.log("Song 1");
+	  }
+
+	})
+
+	container.addChild(boxSong1)
 	// Start Game box
 	startGameBox = new Box({
-						x:0,
-						y:1,
-						z:1.2,
+						x:-1,
+						y:0,
+						z:0,
+						width:1,
 						opacity:0.2,
 						clickFunction: function(theBox) {
 							theBox.setColor( random(255), random(255), random(255) );
@@ -135,7 +181,10 @@ function setup() {
 						}
 	});
 	// add the box to the world
-	world.add(startGameBox);
+	// world.add(startGameBox);
+container.addChild(startGameBox);
+
+	world.camera.setPosition(0,1.2,3);
 
 }
 
@@ -194,7 +243,104 @@ function PlayGame1(){
 
 }
 
+
+// Playing the selected song at 0.1 ms level of precision
+
+// ASCII Keys for the ones we need to use
+var greenKey = 86;
+var redKey = 66;
+var yellowKey = 78;
+var blueKey = 77;
+
+
+function playGame(){
+
+	currentTime = millis()
+	// Assuming the values are relatively in time at second level
+	checkTime = (currentTime - offsetTime)/1000.0
+	checkTime = checkTime.toFixed(1)
+	// console.log(checkTime);
+
+	if (keyIsDown(greenKey) ){
+
+// User pressed green key, but is it right?
+		if (songData.green.includes(checkTime)){
+			// console.log(checkTime);
+			// greenPts.push(checkTime);
+			boxSong1.setColor(0,255,0)
+			hits += 1;
+			pointBar.setWidth(pointBar.getWidth() + 0.01);
+			// sphereGreen.
+		} else {
+			hits-= 1;
+			pointBar.setWidth(pointBar.getWidth() - 0.008);
+			boxSong1.setColor(0,0,0)
+		}
+
+}
+
+
+	if (keyIsDown(redKey)){
+
+		if (songData.red.includes(checkTime)){
+			// console.log(checkTime);
+			// greenPts.push(checkTime);
+			boxSong1.setColor(255,0,0)
+			hits += 1;
+			pointBar.setWidth(pointBar.getWidth() + 0.01);
+			// sphereGreen.
+		} else {
+			hits-= 1;
+			pointBar.setWidth(pointBar.getWidth() - 0.008);
+			boxSong1.setColor(0,0,0)
+		}
+	}
+
+	if (keyIsDown(yellowKey)){
+
+		if (songData.yellow.includes(checkTime)){
+			// console.log(checkTime);
+			// greenPts.push(checkTime);
+			boxSong1.setColor(255,255,0)
+			hits += 1;
+			pointBar.setWidth(pointBar.getWidth() + 0.01);
+
+		} else {
+			hits-= 1;
+			pointBar.setWidth(pointBar.getWidth() - 0.008);
+			boxSong1.setColor(0,0,0)
+		}
+
+	}
+
+	if (keyIsDown(blueKey)){
+
+		if (songData.blue.includes(checkTime)){
+			// console.log(checkTime);
+			// greenPts.push(checkTime);
+			boxSong1.setColor(0,0,255)
+			hits += 1;
+			pointBar.setWidth(pointBar.getWidth() + 0.01);
+			// sphereGreen.
+		} else {
+			hits-= 1;
+			pointBar.setWidth(pointBar.getWidth() - 0.008);
+			boxSong1.setColor(0,0,0)
+		}
+
+  }
+
+	// boxSong1.setColor(255,255,255)
+
+
+}
+
+
+// Key codes: need to disable camera and use arrow keyIsDown
+// v 118 b 98 n 110 m 109
 function draw() {
+
+// console.log(keyCode);
 
 	if (gameState == 0) {
 		// console.log("Ready to start Game")
@@ -203,8 +349,8 @@ function draw() {
 
 	if (gameState ==1){
 
-		world.remove(startGameBox);
-		document.querySelector("#mainTextBox").remove()
+		container.removeChild(startGameBox);
+		// document.querySelector("#mainTextBox").remove()
 		cubeFace.play();
 		offsetTime = millis() - 4000
 		gameState =2
@@ -213,7 +359,8 @@ function draw() {
 	}
 
 	if(gameState ==2){
-		PlayGame1();
+		// PlayGame1();
+		playGame();
 
 	}
 }
