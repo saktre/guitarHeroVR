@@ -71,9 +71,7 @@
 				<!-- The video asset automatically starts, sometimes with many layers, need to assign it on demand -->
          <!-- <a-video id = "guitarHero" src = "static/guitarHero.mp4"> </a-video> -->
 
-				 <video id="song1-vid" loop="false" src="static/guitarHero.mp4"></video>
-
-
+				 <video id="song1-vid" loop="false" ></video>
 
 				<a-asset-item id="stage" src="static/stage/model.obj"></a-asset-item>
 				<a-asset-item id="stageMtl" src="static/stage/materials.mtl"></a-asset-item>
@@ -84,10 +82,11 @@
 
 
 			</a-assets>
-        <!-- <a-entity id="videoEntity" position="0.24 1.6 1" geometry="primitive:plane" material="src: #guitarHero"> </a-entity> -->
+        <a-entity id="videoEntity" position="0.24 1.6 1" geometry="primitive:plane" material="src: #song1-vid"> </a-entity>
+				<!-- <a-camera wasd-controls-enabled="false"></a-camera> -->
 
+				<!-- <a-video src="#song1-vid" width="1" height="1" position="0.24 1.6 1"></a-video> -->
 				<!-- Alternate method to play video on plane and assign it source and when to start playing -->
-				<a-video src="#song1-vid" width="1" height="1" position="0.24 1.6 1"></a-video>
 
 				<!-- <a-text id="mainTextBox" value="Welcome to Guitar Hero VR mode" geometry="primitive:plane" position="0.23 1 1.5"></a-text> -->
 

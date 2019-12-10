@@ -15,7 +15,12 @@ var songData;
 // 2: Song Stats - Total hits/misses (percentage)
 var gameState = 0;
 var startGameBox; //For Starting the game as of now
+var planeBack //For empty screen at start
 
+// Data files as JSON for holding the songMapping of timings for correct responses
+var songData, songData1, songData2
+var pathSong1 = "./../media/slowRide.mp4";
+var pathSong2 = "./../media/bohemianRhapsody.mp4";
 
 // For debugging and showing text
 var textHolder
@@ -62,8 +67,8 @@ function setup() {
 
 	currentTime = millis();
 
-	cheering.setVolume(0.01);
-	booing.setVolume(0.01);
+	// cheering.setVolume(0.01);
+	// booing.setVolume(0.01);
 
 	// construct the A-Frame world
 	// this function requires a reference to the ID of the 'a-scene' tag in our HTML document
@@ -74,9 +79,10 @@ function setup() {
 	generateCrowd();
 
 // Load song file
-	songData = loadJSON("static/slowDownData.json")
+	songData1 = loadJSON("static/slowDownData.json")
+	songData2 = loadJSON("static/slowDownData.json")
 	// cubeFace.setAttribute("src",".././musicVR_Support/bohemianRhapsody.mp4")
-	cubeFace.setAttribute("src",".././musicVR_Support/slowRide.mp4")
+	// cubeFace.setAttribute("src",".././musicVR_Support/slowRide.mp4")
 
 
 // Keeping score
@@ -152,12 +158,12 @@ function setup() {
 	// container.addChild(b)
 
 
-
+// Used for lighting
 	boxSong1 = new Box({
 	  x:0, y:0, z:1,
 	  red:0, green:0, blue:0,
-	  width:4, height:3, depth:4,
-		opacity:0.3,
+	  width:4, height:4, depth:4,
+		opacity:0.2,
 		side: 'double',
 		clickFunction: function(theOBJ) {
 	  	console.log("Song 1");
@@ -166,83 +172,68 @@ function setup() {
 	})
 
 	container.addChild(boxSong1)
-	// Start Game box
-	startGameBox = new Box({
-						x:-1,
-						y:0,
-						z:0,
+// $$$$$ SONG BOXES
+	// Select Song you want to choose
+	startSlowRide = new Box({
+						x:-1, y:0, z:0,
 						width:1,
-						opacity:0.2,
+						opacity:0.4,
+						red:0, green:200,blue:0,
 						clickFunction: function(theBox) {
 							theBox.setColor( random(255), random(255), random(255) );
-
 							gameState = 1;
-
 						}
 	});
+
+	startBohemian = new Box({
+						x:1, y:0, z:0,
+						width:1,
+						opacity:0.4,
+						red:200, green:0,blue:0,
+						onHover:function(theBox){
+							console.log("Bohemian");
+						},
+						clickFunction: function(theBox) {
+							theBox.setColor( random(255), random(255), random(255) );
+							gameState = 3;
+						}
+	});
+
+	// add a plane to hide the crowd and show text
+
+	planeBack = new Plane({
+		x:0, y:0, z:0,
+		red:0,green:0,blue:0,
+		width:5, height:10
+	})
+
+	container.addChild(planeBack);
 	// add the box to the world
 	// world.add(startGameBox);
-container.addChild(startGameBox);
+container.addChild(startSlowRide);
+container.addChild(startBohemian);
+
+// Start Game box
+startGameBox = new Box({
+					x:-1,
+					y:0,
+					z:0,
+					width:1,
+					opacity:0.4,
+					clickFunction: function(theBox) {
+						theBox.setColor( random(255), random(255), random(255) );
+
+						gameState = 1;
+
+					}
+});
+
+
+
 
 	world.camera.setPosition(0,1.2,3);
 
 }
-
-
-
-function PlayGame1(){
-
-	// offsetTime is set to Millis value
-	 // when the user clicks play for current selected song
-	currentTime = millis()
-	// Assuming the values are relatively in time at second level
-	checkTime = Math.floor((currentTime - offsetTime)/1000)
-	// console.log(checkTime)
-
-	if(keyIsPressed == true && key == "u" && greenPoint.includes(checkTime)){
-		hits += 1;
-		sphereGreen.setGreen(255);
-		pointBar.setWidth(pointBar.getWidth() + 0.01);
-	}
-	if(keyIsPressed == true && key == "i" && redPoint.includes(checkTime)) {
-		hits += 1;
-		sphereRed.setRed(255);
-		pointBar.setWidth(pointBar.getWidth() + 0.01);
-	}
-	if(keyIsPressed == true && key == "o" && yellowPoint.includes(checkTime)) {
-		hits += 1;
-		sphereYellow.setGreen(255);
-		sphereYellow.setRed(255);
-		pointBar.setWidth(pointBar.getWidth() + 0.01);
-	}
-	if(keyIsPressed == true && key == "p" && bluePoint.includes(checkTime)) {
-		hits += 1;
-		sphereBlue.setBlue(255);
-		pointBar.setWidth(pointBar.getWidth() + 0.01);
-	}
-	if(keyIsPressed == false) {
-		sphereGreen.setGreen(0);
-		sphereRed.setRed(0);
-		sphereYellow.setGreen(0);
-		sphereYellow.setRed(0);
-		sphereBlue.setBlue(0);
-	}
-
-	if(hits > 15) {
-		for(let happyCrowd = 0; happyCrowd < crowdAction.length; happyCrowd++) {
-			crowdAction[happyCrowd].move();
-		}
-		//cheering.play();
-	}
-
-	if(hits < 40 && Math.floor(millis() / 1000) == Math.floor(cubeFace.duration / 2)) {
-		//booing.play();
-	}
-
-
-
-}
-
 
 // Playing the selected song at 0.1 ms level of precision
 
@@ -260,6 +251,12 @@ function playGame(){
 	checkTime = (currentTime - offsetTime)/1000.0
 	checkTime = checkTime.toFixed(1)
 	// console.log(checkTime);
+	// Reset sphere colors
+	sphereGreen.setColor(0,255,0);
+	sphereRed.setColor(255,0,0);
+	sphereYellow.setColor(255,255,0);
+	sphereBlue.setColor(0,0,255);
+
 
 	if (keyIsDown(greenKey) ){
 
@@ -267,14 +264,15 @@ function playGame(){
 		if (songData.green.includes(checkTime)){
 			// console.log(checkTime);
 			// greenPts.push(checkTime);
-			boxSong1.setColor(0,255,0)
+			boxSong1.setColor(0,random(180,255),0)
 			hits += 1;
 			pointBar.setWidth(pointBar.getWidth() + 0.01);
-			// sphereGreen.
+			sphereGreen.setColor(0,255,0);
 		} else {
 			hits-= 1;
-			pointBar.setWidth(pointBar.getWidth() - 0.008);
+			pointBar.setWidth(pointBar.getWidth() - 0.003);
 			boxSong1.setColor(0,0,0)
+			sphereGreen.setColor(0,0,0);
 		}
 
 }
@@ -288,11 +286,12 @@ function playGame(){
 			boxSong1.setColor(255,0,0)
 			hits += 1;
 			pointBar.setWidth(pointBar.getWidth() + 0.01);
-			// sphereGreen.
+			sphereRed.setColor(255,0,0)
 		} else {
 			hits-= 1;
-			pointBar.setWidth(pointBar.getWidth() - 0.008);
+			pointBar.setWidth(pointBar.getWidth() - 0.003);
 			boxSong1.setColor(0,0,0)
+			sphereRed.setColor(0,0,0)
 		}
 	}
 
@@ -304,11 +303,13 @@ function playGame(){
 			boxSong1.setColor(255,255,0)
 			hits += 1;
 			pointBar.setWidth(pointBar.getWidth() + 0.01);
+			sphereYellow.setColor(255,255,0)
 
 		} else {
 			hits-= 1;
-			pointBar.setWidth(pointBar.getWidth() - 0.008);
+			pointBar.setWidth(pointBar.getWidth() - 0.003);
 			boxSong1.setColor(0,0,0)
+			sphereYellow.setColor(0,0,0)
 		}
 
 	}
@@ -321,14 +322,28 @@ function playGame(){
 			boxSong1.setColor(0,0,255)
 			hits += 1;
 			pointBar.setWidth(pointBar.getWidth() + 0.01);
-			// sphereGreen.
+			sphereBlue.setColor(0,0,255)
 		} else {
 			hits-= 1;
-			pointBar.setWidth(pointBar.getWidth() - 0.008);
+			pointBar.setWidth(pointBar.getWidth() - 0.003);
 			boxSong1.setColor(0,0,0)
+			sphereBlue.setColor(0,0,0)
 		}
 
   }
+
+
+		if(hits > 15) {
+			for(let happyCrowd = 0; happyCrowd < crowdAction.length; happyCrowd++) {
+				crowdAction[happyCrowd].move();
+			}
+			//cheering.play();
+		}
+
+		if(hits < 40 && Math.floor(millis() / 1000) == Math.floor(cubeFace.duration / 2)) {
+			//booing.play();
+		}
+
 
 	// boxSong1.setColor(255,255,255)
 
@@ -344,18 +359,63 @@ function draw() {
 
 	if (gameState == 0) {
 		// console.log("Ready to start Game")
+		sphereGreen.hide()
+		sphereRed.hide()
+		sphereYellow.hide()
+		sphereBlue.hide()
+		document.getElementById('videoEntity').setAttribute('visible', false);
 
 	}
 
 	if (gameState ==1){
 
-		container.removeChild(startGameBox);
+		sphereGreen.show()
+		sphereRed.show()
+		sphereYellow.show()
+		sphereBlue.show()
+		document.getElementById('videoEntity').setAttribute('visible', true);
+
+		container.removeChild(startSlowRide);
+		container.removeChild(startBohemian);
+		container.removeChild(planeBack);
+
+		// Correct position of Spheres for this song1
+		sphereRed.setX(0.039)
+		sphereGreen.setX(-0.1049)
+		sphereYellow.setX(0.19)
+		sphereBlue.setX(0.329)
+
+		cubeFace.setAttribute("src",pathSong1)
+		songData = songData1;
 		// document.querySelector("#mainTextBox").remove()
 		cubeFace.play();
 		offsetTime = millis() - 4000
 		gameState =2
 
 	// Main game codes
+	}
+
+// For bohemianRhapsody
+	if (gameState == 3){
+
+		sphereGreen.show()
+		sphereRed.show()
+		sphereYellow.show()
+		sphereBlue.show()
+		document.getElementById('videoEntity').setAttribute('visible', true);
+
+		container.removeChild(startSlowRide);
+		container.removeChild(startBohemian);
+		container.removeChild(planeBack);
+
+		cubeFace.setAttribute("src",pathSong2)
+		songData = songData1;
+		// document.querySelector("#mainTextBox").remove()
+		cubeFace.play();
+		offsetTime = millis() - 4000
+		gameState =2
+
+
 	}
 
 	if(gameState ==2){
