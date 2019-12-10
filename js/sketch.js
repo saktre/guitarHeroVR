@@ -232,16 +232,23 @@ startGameBox = new Box({
 
 
 	world.camera.setPosition(0,1.2,3);
+	world.camera.holder.setAttribute('wasd-controls',"enabled:false;")
 
 }
 
 // Playing the selected song at 0.1 ms level of precision
 
 // ASCII Keys for the ones we need to use
-var greenKey = 86;
-var redKey = 66;
-var yellowKey = 78;
-var blueKey = 77;
+//
+// var greenKey = 70;
+// var redKey = 71;
+// var yellowKey = 32;
+// var blueKey = 77;
+
+var greenKey = 87;
+var redKey = 65;
+var yellowKey = 83;
+var blueKey = 68;
 
 
 function playGame(){
