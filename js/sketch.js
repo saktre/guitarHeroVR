@@ -8,6 +8,9 @@ var b;
 var boxSong1, boxSong2;
 var songData;
 
+// Store the current click in a function to count for scoring
+var currClick;
+
 
 // Intital Game state to start the game
 // 0: Game load page - Select song
@@ -102,28 +105,47 @@ function setup() {
 	sphereGreen = new Sphere({
 						x:0.02, y:1.1, z:1,
 						radius: 0.05,
-						red:0, green:255, blue:0
+						red:0, green:255, blue:0,
+						clickFunction: function(theOBJ) {
+					  	console.log("sphereGreen");
+							currClick = "green"
+						}
 					});
 	world.add(sphereGreen);
 
   sphereRed = new Sphere({
 						x:0.13, y:1.1, z:1,
 						radius: 0.05,
-						red:255, green:0, blue:0
+						red:255, green:0, blue:0,
+						clickFunction: function(theOBJ) {
+					  	console.log("sphereRed");
+							currClick = "red"
+						}
+
 					});
 	world.add(sphereRed);
 
   sphereYellow = new Sphere({
 						x:0.24, y:1.1, z:1,
 						radius: 0.05,
-						red:255, green:255, blue:0
+						red:255, green:255, blue:0,
+						clickFunction: function(theOBJ) {
+					  	console.log("sphereYellow");
+							currClick = "yellow"
+						}
+
 					});
 	world.add(sphereYellow);
 
   sphereBlue = new Sphere({
 						x:0.35, y:1.1, z:1,
 						radius: 0.05,
-						red:0, green:0, blue:255
+						red:0, green:0, blue:255,
+						clickFunction: function(theOBJ) {
+					  	// console.log("blueSphere");
+							currClick = "blue"
+						}
+
 					});
 	world.add(sphereBlue);
 
@@ -249,6 +271,7 @@ var greenKey = 87;
 var redKey = 65;
 var yellowKey = 83;
 var blueKey = 68;
+var mouseDown = false;
 
 
 function playGame(){
@@ -263,6 +286,77 @@ function playGame(){
 	sphereRed.setColor(255,0,0);
 	sphereYellow.setColor(255,255,0);
 	sphereBlue.setColor(0,0,255);
+
+	if (mouseDown){
+		if(currClick == "green"){
+				if (songData.green.includes(checkTime)){
+
+					boxSong1.setColor(0,random(180,255),0)
+					hits += 1;
+					pointBar.setWidth(pointBar.getWidth() + 0.01);
+					sphereGreen.setColor(0,255,0);
+				} else {
+					hits-= 1;
+					pointBar.setWidth(pointBar.getWidth() - 0.003);
+					boxSong1.setColor(0,0,0)
+					sphereGreen.setColor(0,0,0);
+				}
+
+			}
+
+
+
+			if(currClick == "red"){
+					if (songData.red.includes(checkTime)){
+
+						boxSong1.setColor(random(180,255),0,0)
+						hits += 1;
+						pointBar.setWidth(pointBar.getWidth() + 0.01);
+						sphereRed.setColor(255,0,0);
+					} else {
+						hits-= 1;
+						pointBar.setWidth(pointBar.getWidth() - 0.003);
+						boxSong1.setColor(0,0,0)
+						sphereRed.setColor(0,0,0);
+					}
+
+				}
+
+
+				if(currClick == "yellow"){
+						if (songData.yellow.includes(checkTime)){
+
+							boxSong1.setColor(random(180,255),random(180,255),0)
+							hits += 1;
+							pointBar.setWidth(pointBar.getWidth() + 0.01);
+							sphereYellow.setColor(255,255,0);
+						} else {
+							hits-= 1;
+							pointBar.setWidth(pointBar.getWidth() - 0.003);
+							boxSong1.setColor(0,0,0)
+							sphereYellow.setColor(0,0,0);
+						}
+
+					}
+
+					if(currClick == "blue"){
+							if (songData.blue.includes(checkTime)){
+
+								boxSong1.setColor(0,0,random(180,255))
+								hits += 1;
+								pointBar.setWidth(pointBar.getWidth() + 0.01);
+								sphereBlue.setColor(0,0,255);
+							} else {
+								hits-= 1;
+								pointBar.setWidth(pointBar.getWidth() - 0.003);
+								boxSong1.setColor(0,0,0)
+								sphereBlue.setColor(0,0,0);
+							}
+
+						}
+
+	}
+
 
 
 	if (keyIsDown(greenKey) ){
@@ -435,5 +529,10 @@ function draw() {
 function mousePressed(){
 	// console.log("Clicked")
 	// Why does this happen multiple times?
+	mouseDown = true
+}
 
+function mouseReleased(){
+	mouseDown = false
+	currClick = "none"
 }
