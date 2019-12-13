@@ -6,14 +6,14 @@ var xPos = -2;
 var yPos = 1.72;
 var zPos = -1;
 var cubeFace;
-var cheering;
+var cheering, cubeFace2;
 var booing;
 
 var crowdAction = [];
 
 document.addEventListener("DOMContentLoaded",function() {
-  // cubeFace = document.querySelector("#guitarHero");
   cubeFace = document.querySelector("#song1-vid");
+  cubeFace2 = document.querySelector("#song2-vid");
 
 });
 

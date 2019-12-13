@@ -19,11 +19,12 @@ var currClick;
 var gameState = 0;
 var startGameBox; //For Starting the game as of now
 var planeBack //For empty screen at start
+var welcomeText;
 
 // Data files as JSON for holding the songMapping of timings for correct responses
 var songData, songData1, songData2
-var pathSong1 = "./../media/slowRide.mp4";
-var pathSong2 = "./../media/bohemianRhapsody.mp4";
+// var pathSong1 = "./../media/slowRide.mp4";
+// var pathSong2 = "./../media/bohemianRhapsody.mp4";
 
 // For debugging and showing text
 var textHolder
@@ -91,14 +92,17 @@ function setup() {
 // Keeping score
 
 	pointBar = new Plane({
-		x:-3, y:3, z:0,
+		x:-3, y:3.2, z:0,
 		width: 0.1,
-		height: 0.2,
+		height: 0.3,
 		red: 0,
 		green: 0,
 		blue: 255,
+		opacity:0.5
 	});
 	world.add(pointBar);
+
+
 
 	// sphere primitive for CLicking buttons and visualizing them
 
@@ -160,6 +164,18 @@ function setup() {
 	});
 	world.add(stage);
 
+
+	welcomeText = new Plane({
+		x:-0.1, y:2, z:2,
+		width:3,height:0.7,depth:1,
+		red:255,green:255,blue:255, opacity:0.9,
+		clickFunction: function(theOBJ) {
+			// console.log("blueSphere")
+		}
+	})
+
+welcomeText.tag.setAttribute('text','value: Welcome to Guitar Hero in VR; color: rgb(0,0,0);align:center;')
+world.add(welcomeText);
 
 // Container to hold start screen, first song, second song
 
@@ -359,7 +375,7 @@ function playGame(){
 
 
 
-	if (keyIsDown(greenKey) ){
+	if (keyIsDown(greenKey) || keyIsDown(49) || keyIsDown(67) ){
 
 // User pressed green key, but is it right?
 		if (songData.green.includes(checkTime)){
@@ -379,7 +395,8 @@ function playGame(){
 }
 
 
-	if (keyIsDown(redKey)){
+
+	if (keyIsDown(redKey)|| keyIsDown(50) || keyIsDown(86)){
 
 		if (songData.red.includes(checkTime)){
 			// console.log(checkTime);
@@ -396,7 +413,7 @@ function playGame(){
 		}
 	}
 
-	if (keyIsDown(yellowKey)){
+	if (keyIsDown(yellowKey)|| keyIsDown(51) || keyIsDown(66) ){
 
 		if (songData.yellow.includes(checkTime)){
 			// console.log(checkTime);
@@ -415,7 +432,7 @@ function playGame(){
 
 	}
 
-	if (keyIsDown(blueKey)){
+	if (keyIsDown(blueKey)|| keyIsDown(52) || keyIsDown(78)){
 
 		if (songData.blue.includes(checkTime)){
 			// console.log(checkTime);
@@ -438,14 +455,23 @@ function playGame(){
 			for(let happyCrowd = 0; happyCrowd < crowdAction.length; happyCrowd++) {
 				crowdAction[happyCrowd].move();
 			}
+
+			if (cheering.isPlaying() == 'false'){
+				cheering.play()
+			}
 			//cheering.play();
 		}
 
 		if(hits < 40 && Math.floor(millis() / 1000) == Math.floor(cubeFace.duration / 2)) {
 			//booing.play();
+			if (booing.isPlaying() == 'false'){
+				booing.play()
+			}
 		}
 
 
+		// Show score
+welcomeText.tag.setAttribute('text','value: Score '+ hits +'; color: rgb(0,0,0); align:center;')
 	// boxSong1.setColor(255,255,255)
 
 
@@ -465,10 +491,14 @@ function draw() {
 		sphereYellow.hide()
 		sphereBlue.hide()
 		document.getElementById('videoEntity').setAttribute('visible', false);
+		document.getElementById('videoEntity2').setAttribute('visible', false);
+
 
 	}
 
 	if (gameState ==1){
+
+		// pathSong1 = document.getElementById('song1-vid').src;
 
 		sphereGreen.show()
 		sphereRed.show()
@@ -486,7 +516,7 @@ function draw() {
 		sphereYellow.setX(0.19)
 		sphereBlue.setX(0.329)
 
-		cubeFace.setAttribute("src",pathSong1)
+		// cubeFace.setAttribute("src",pathSong1)
 		songData = songData1;
 		// document.querySelector("#mainTextBox").remove()
 		cubeFace.play();
@@ -499,20 +529,22 @@ function draw() {
 // For bohemianRhapsody
 	if (gameState == 3){
 
+				// pathSong2 = document.getElementById('song2-vid').src;
+
 		sphereGreen.show()
 		sphereRed.show()
 		sphereYellow.show()
 		sphereBlue.show()
-		document.getElementById('videoEntity').setAttribute('visible', true);
+		document.getElementById('videoEntity2').setAttribute('visible', true);
 
 		container.removeChild(startSlowRide);
 		container.removeChild(startBohemian);
 		container.removeChild(planeBack);
 
-		cubeFace.setAttribute("src",pathSong2)
+		// cubeFace.setAttribute("src",pathSong2)
 		songData = songData1;
 		// document.querySelector("#mainTextBox").remove()
-		cubeFace.play();
+		cubeFace2.play();
 		offsetTime = millis() - 4000
 		gameState =2
 
@@ -521,6 +553,9 @@ function draw() {
 
 	if(gameState ==2){
 		// PlayGame1();
+		// Move text box to back and update it with score
+		welcomeText.setPosition(-2,3.2,-0.6)
+		welcomeText.setWidth(10)
 		playGame();
 
 	}

@@ -71,7 +71,8 @@
 				<!-- The video asset automatically starts, sometimes with many layers, need to assign it on demand -->
          <!-- <a-video id = "guitarHero" src = "static/guitarHero.mp4"> </a-video> -->
 
-				 <video id="song1-vid" loop="false" ></video>
+				 <video id="song1-vid" autoplay='false' loop="false" src='../media/slowRide.mp4' ></video>
+				 <video id="song2-vid" autoplay='false' loop="false" src='../media/bohemianRhapsody.mp4' ></video>
 
 				<a-asset-item id="stage" src="static/stage/model.obj"></a-asset-item>
 				<a-asset-item id="stageMtl" src="static/stage/materials.mtl"></a-asset-item>
@@ -83,6 +84,8 @@
 
 			</a-assets>
         <a-entity id="videoEntity" position="0.24 1.6 1" geometry="primitive:plane" material="src: #song1-vid"> </a-entity>
+				<a-entity id="videoEntity2" position="0.24 1.6 1" geometry="primitive:plane" material="src: #song2-vid"> </a-entity>
+
 				<!-- <a-camera wasd-controls-enabled="false"></a-camera> -->
 
 				<!-- <a-video src="#song1-vid" width="1" height="1" position="0.24 1.6 1"></a-video> -->
