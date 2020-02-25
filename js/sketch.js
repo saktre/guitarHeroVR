@@ -65,8 +65,8 @@ function setup() {
 // Need to load the files in setup as per FAQs online
 // https://github.com/processing/p5.js/wiki/Frequently-Asked-Questions#why-cant-i-assign-variables-using-p5-functions-and-variables-before-setup
 
-	cheering = loadSound("cdn/guitarheroVR/static/cheering.mp3");
-	booing = loadSound("cdn/guitarheroVR/static/booing.mp3");
+	cheering = loadSound("cdn/guitarHeroVR/static/cheering.mp3");
+	booing = loadSound("cdn/guitarHeroVR/static/booing.mp3");
 	noCanvas();
 
 	currentTime = millis();
@@ -83,8 +83,8 @@ function setup() {
 	generateCrowd();
 
 // Load song file
-	songData1 = loadJSON("cdn/guitarheroVR/static/slowDownData.json")
-	songData2 = loadJSON("cdn/guitarheroVR/static/slowDownData.json")
+	songData1 = loadJSON("cdn/guitarHeroVR/static/slowDownData.json")
+	songData2 = loadJSON("cdn/guitarHeroVR/static/slowDownData.json")
 	// cubeFace.setAttribute("src",".././musicVR_Support/bohemianRhapsody.mp4")
 	// cubeFace.setAttribute("src",".././musicVR_Support/slowRide.mp4")
 
